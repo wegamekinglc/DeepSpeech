@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 add_arg = functools.partial(add_arguments, argparser=parser)
 # yapf: disable
 add_arg('host_port',        int,    8086,    "Server's IP port.")
-add_arg('beam_size',        int,    500,    "Beam search width.")
+add_arg('beam_size',        int,    4000,    "Beam search width.")
 add_arg('num_conv_layers',  int,    2,      "# of convolution layers.")
 add_arg('num_rnn_layers',   int,    3,      "# of recurrent layers.")
 add_arg('rnn_layer_size',   int,    2048,   "# of recurrent cells per layer.")
@@ -27,31 +27,32 @@ add_arg('alpha',            float,  2.5,   "Coef of LM for beam search.")
 add_arg('beta',             float,  0.3,   "Coef of WC for beam search.")
 add_arg('cutoff_prob',      float,  1.0,    "Cutoff probability for pruning.")
 add_arg('cutoff_top_n',     int,    40,     "Cutoff number for pruning.")
-add_arg('use_gru',          bool,   False,  "Use GRUs instead of simple RNNs.")
+add_arg('use_gru',          bool,   True,  "Use GRUs instead of simple RNNs.")
 add_arg('use_gpu',          bool,   True,   "Use GPU or not.")
-add_arg('share_rnn_weights',bool,   True,   "Share input-hidden weights across "
+add_arg('share_rnn_weights',bool,   False,   "Share input-hidden weights across "
                                             "bi-directional RNNs. Not for GRU.")
 add_arg('host_ip',          str,
-        'localhost',
+        '0.0.0.0',
         "Server's IP address.")
 add_arg('speech_save_dir',  str,
         'demo_cache',
         "Directory to save demo audios.")
-add_arg('warmup_manifest',  str,
-        'data/librispeech/manifest.test-clean',
-        "Filepath of manifest to warm up.")
+# add_arg('warmup_manifest',  str,
+#         'models/baidu_cn1.2k/manifest.test-clean',
+#         "Filepath of manifest to warm up.")
 add_arg('mean_std_path',    str,
-        'data/librispeech/mean_std.npz',
+        'models/baidu_cn1.2k/mean_std.npz',
         "Filepath of normalizer's mean & std.")
 add_arg('vocab_path',       str,
-        'data/librispeech/eng_vocab.txt',
+        'models/baidu_cn1.2k/
+        'vocab.txt',
         "Filepath of vocabulary.")
 add_arg('model_path',       str,
-        './checkpoints/libri/params.latest.tar.gz',
+        'models/baidu_cn1.2k/params.tar.gz',
         "If None, the training starts from scratch, "
         "otherwise, it resumes from the pre-trained model.")
 add_arg('lang_model_path',  str,
-        'lm/data/common_crawl_00.prune01111.trie.klm',
+        'models/lm/zh_giga.no_cna_cmn.prune01244.klm',
         "Filepath for language model.")
 add_arg('decoding_method',  str,
         'ctc_beam_search',
@@ -115,7 +116,7 @@ class AsrRequestHandler(SocketServer.BaseRequestHandler):
         file = wave.open(out_filename, 'wb')
         file.setnchannels(1)
         file.setsampwidth(4)
-        file.setframerate(16000)
+        file.setframerate(8000)
         file.writeframes(data)
         file.close()
         return out_filename
@@ -187,13 +188,13 @@ def start_server():
         return result_transcript[0]
 
     # warming up with utterrances sampled from Librispeech
-    print('-----------------------------------------------------------')
-    print('Warming up ...')
-    warm_up_test(
-        audio_process_handler=file_to_transcript,
-        manifest_path=args.warmup_manifest,
-        num_test_cases=3)
-    print('-----------------------------------------------------------')
+    # print('-----------------------------------------------------------')
+    # print('Warming up ...')
+    # warm_up_test(
+    #    audio_process_handler=file_to_transcript,
+    #    manifest_path=args.warmup_manifest,
+    #    num_test_cases=3)
+    # print('-----------------------------------------------------------')
 
     # start the server
     server = AsrTCPServer(
