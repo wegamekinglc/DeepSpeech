@@ -44,8 +44,7 @@ add_arg('mean_std_path',    str,
         'models/baidu_cn1.2k/mean_std.npz',
         "Filepath of normalizer's mean & std.")
 add_arg('vocab_path',       str,
-        'models/baidu_cn1.2k/
-        'vocab.txt',
+        'models/baidu_cn1.2k/vocab.txt',
         "Filepath of vocabulary.")
 add_arg('model_path',       str,
         'models/baidu_cn1.2k/params.tar.gz',
