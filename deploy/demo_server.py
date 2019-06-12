@@ -99,8 +99,7 @@ class AsrRequestHandler(SocketServer.BaseRequestHandler):
         start_time = time.time()
         transcript = self.server.audio_process_handler(filename)
         finish_time = time.time()
-        print("Response Time: %f, Transcript: %s" %
-              (finish_time - start_time, transcript))
+        print("Response Time: %f" % (finish_time - start_time))
         self.request.sendall(transcript.encode('utf-8'))
 
     def _write_to_file(self, data):
