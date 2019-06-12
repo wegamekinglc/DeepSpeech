@@ -13,7 +13,7 @@ fi
 python -c "import soundfile"
 if [ $? != 0 ]; then
     echo "Install package libsndfile into default system path."
-    cp package/libsndfile-1.0.28.tar.gz .
+    cp packages/libsndfile-1.0.28.tar.gz .
     tar -zxvf libsndfile-1.0.28.tar.gz
     cd libsndfile-1.0.28
     ./configure > /dev/null && make > /dev/null && make install > /dev/null
