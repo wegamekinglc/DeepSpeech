@@ -22,6 +22,14 @@ if [ $? != 0 ]; then
     rm libsndfile-1.0.28.tar.gz
 fi
 
+cp packages/pa_stable_v190600_20161030.tgz .
+tar -zxvf pa_stable_v190600_20161030.tgz
+cd portaudio
+./configure > /dev/null && make > /dev/null && make install > /dev/null
+cd ..
+rm -rf portaudio
+rm pa_stable_v190600_20161030.tgz
+
 # install decoders
 python -c "import pkg_resources; pkg_resources.require(\"swig_decoders==1.1\")"
 if [ $? != 0 ]; then
@@ -29,6 +37,9 @@ if [ $? != 0 ]; then
     sh setup.sh
     cd - > /dev/null
 fi
+
+
+
 
 
 echo "Install all dependencies successfully."
