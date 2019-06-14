@@ -29,6 +29,7 @@ add_arg('cutoff_prob',      float,  1.0,    "Cutoff probability for pruning.")
 add_arg('cutoff_top_n',     int,    40,     "Cutoff number for pruning.")
 add_arg('use_gru',          bool,   True,  "Use GRUs instead of simple RNNs.")
 add_arg('use_gpu',          bool,   True,   "Use GPU or not.")
+add_arg('workers',          int,   1,   "how many workers to use.")
 add_arg('share_rnn_weights',bool,   False,   "Share input-hidden weights across "
                                             "bi-directional RNNs. Not for GRU.")
 add_arg('host_ip',          str,
@@ -206,7 +207,7 @@ def start_server():
 
 def main():
     print_arguments(args)
-    paddle.init(use_gpu=args.use_gpu, trainer_count=1)
+    paddle.init(use_gpu=args.use_gpu, trainer_count=args.workers)
     start_server()
 
 
